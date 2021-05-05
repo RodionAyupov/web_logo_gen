@@ -13,17 +13,17 @@ function LogoGenerator(text){
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function drawCircle() {
+    function drawCircle(star_size) {
         ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.arc(Math.random()*canvasWidth, Math.random()*canvasHeight, 10, 0, 2 * Math.PI);
+        ctx.arc(Math.random()*canvasWidth, Math.random()*canvasHeight, star_size, 0, 2 * Math.PI);
         ctx.fill();
     }
     for (var i = 1; i < 99999; i++)
         window.clearInterval(i);
 
     window.setInterval(function(){
-      drawCircle();
+      drawCircle(4);
     }, 500 / 1); // 25 times per second
 
     drawCircle();
