@@ -123,7 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/rodionayupov/django_deploy_test/auapp/mysite/static/'
+STATIC_ROOT = '/home/rodionayupov/web_logo_gen/mysite/static/'
 
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, "static",),
@@ -133,3 +133,6 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_URL = 'static/media/'
+STATIC_ROOT = '/home/rodionayupov/web_logo_gen/mysite/static/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")
