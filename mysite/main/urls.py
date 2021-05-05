@@ -19,17 +19,15 @@ from django.conf.urls import url
 from . import views
 
 
-# urlpatterns = [
-#    url(r'^$', views.landing, name='landing'),
-#     url(r'^wrong_qr/$', views.wrong_qr, name='wrong_qr'),
-#     url(r'^get_data/$', views.home, name='home'),
-#     url(r'^update/$', views.update, name='update'),
-#     url(r'^get_link/$', views.setup, name='setup'),
-#
-#     url(r'^service/delete_status/$', views.delete_status, name='delete_status'),
-#     url(r'^service/check_status/$', views.check_status, name='check_status'),
-#     url(r'^service/set_status/$', views.set_status, name='set_status'),
-#     url(r'^service/godmode/$', views.godmode, name='godmode'),
-#
-#
-# ]
+urlpatterns = [
+   url(r'^$', views.main_page, name='main_page'),
+    # url(r'^wrong_qr/$', views.wrong_qr, name='wrong_qr'),
+    # url(r'^get_data/$', views.home, name='home'),
+    # url(r'^update/$', views.update, name='update'),
+    # url(r'^get_link/$', views.setup, name='setup'),
+    #
+    # url(r'^service/delete_status/$', views.delete_status, name='delete_status'),
+    # url(r'^service/check_status/$', views.check_status, name='check_status'),
+    # url(r'^service/set_status/$', views.set_status, name='set_status'),
+    # url(r'^service/godmode/$', views.godmode, name='godmode'),
+]
