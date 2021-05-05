@@ -6,7 +6,6 @@ from .forms import *
 # Create your views here.
 
 def main_page(request):
-    Broadcast_form = BroadcastForm(request.POST or None, auto_id=False)
     return render(request, 'main_page/main_page.html', locals())
 
 # def godmode(request):
