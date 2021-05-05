@@ -16,10 +16,10 @@ function LogoGenerator(text){
     function drawCircle() {
         ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.arc(Math.random()*600, Math.random()*600, 10, 0, 2 * Math.PI);
+        ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 10, 0, 2 * Math.PI);
         ctx.fill();
     }
-    for (var i = 1; i < 99999; i++)
+    for (var i = 1; i < 3; i++)
         window.clearInterval(i);
 
     window.setInterval(function(){
