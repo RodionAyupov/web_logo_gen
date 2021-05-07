@@ -1,13 +1,15 @@
-function drawCircle(ctx, x, y, star_size) {
-        ctx.fillStyle = "white";
+function drawCircle(ctx, x, y, star_size, color_state) {
+        if(color_state==1){ctx.fillStyle = "blue";}
+        else {ctx.fillStyle = "black"; star_size+=1;}
         ctx.beginPath();
         ctx.arc(x, y, star_size, 0, 2 * Math.PI);
         ctx.fill();
 }
 
-function LogoGenerator(text){
+function LogoGenerator(){
 //    alert(text);
-//    var text = document.getElementsByName("input_text").value;
+//    var text = document.getElementsById("text").value;
+//    alert(document.getElementById("text").value);
     var canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth; //document.width is obsolete
     canvas.height = window.innerHeight*0.9; //document.height is obsolete
@@ -28,7 +30,7 @@ function LogoGenerator(text){
     var prepared_text = PrepareText('tinkoff.ru');
     PrintLogo(ctx, 10, new_fig, 40, 0.03, canvasWidth, canvasHeight, 5, prepared_text);
 //    window.setInterval(function(){
-//      drawCircle(ctx, Math.random()*344, Math.random()*344, 4);
+//      drawCircle(ctx, Math.random()*344, Math.random()*344, 4, 1);
 //    }, 500 / 1); // 25 times per second
 
 }
@@ -188,39 +190,135 @@ function CreateBankFigure(){
 function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_height, pointsize, prepared_text){
 // PrintLogo(ctx, 10, CreateBankFigure(), 40, 0.02, canvasWidth, canvasHeight, 5, codes, crc_data)
     var codes = prepared_text[0];
-    var crc_code = prepared_text[1];
+    var crc_data = prepared_text[1];
     var time_period = 1000 / frequency;
     var height = screen_height;
     var width = screen_width;
 
     var result_step = (height * scale / size);
-//    alert('result_step: '+result_step);
     var result_border = Math.ceil((width - height) / 2) + Math.ceil((height - result_step * size) / 2);
     var result_border_x = Math.ceil((width - height) / 2) + Math.ceil((height - result_step * size) / 2);
     var result_border_y = Math.ceil((height - result_step * size) / 2);
-//    alert('result_border_x: '+result_border_x);
-//    alert('result_border_y: '+result_border_y);
 
+    //extracting leds data from figure
     var data_leds = figure.data_leds.positions;
     var service_leds = figure.service_leds.positions;
     var crc_leds = figure.crc_leds.positions;
     var contour_leds = figure.contour_leds.positions;
 
+    //preparing service_leds
     var service_leds_transformed = [];
     for(var i=0;i<service_leds.length;i++){
-
        service_leds_transformed.push([service_leds[i][1]*result_step + result_border_x, service_leds[i][0]* result_step + result_border_y]);
     }
     service_leds = service_leds_transformed;
 
+    //switch on contour_leds
     var contour_leds_transformed = [];
     for(var i=0;i<contour_leds.length;i++){
        contour_leds_transformed.push([contour_leds[i][1]*result_step + result_border_x, contour_leds[i][0]* result_step + result_border_y]);
     }
     contour_leds = contour_leds_transformed;
 
-    for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize)}
+    for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize, 1)}
 
+    //switch on crc_leds - возможно нужно это будет отменить
+    var crc_leds_transformed = [];
+    for(var i=0;i<crc_leds.length;i++){
+       crc_leds_transformed.push([crc_leds[i][1]*result_step + result_border_x, crc_leds[i][0]* result_step + result_border_y]);
+    }
+    crc_leds = crc_leds_transformed;
+
+    for(var i=0;i<crc_leds.length;i++){drawCircle(ctx, crc_leds[i][0], crc_leds[i][1], pointsize, 1)}
+    console.log('qwdwd');
+    //далее цикл пока не будет нажата кнопка еще раз
+    var previous_text = document.getElementById("text").value;
+//    alert('previous_text: '+previous_text);
+    var text = previous_text;
+    console.log(text);
+    if (text==previous_text){
+        var d2_count=0;
+        var crc_state=0;
+        var state=0;
+        var row=0;
+        var col=0;
+        var start_time=0;
+        var finish_time=0;
+        var d = new Date();
+        var crc_data_counter = -1;
+        var i=0;
+        crc_data_counter+=1;
+        var k=0;
+//        console.log(k);
+        var status = false;
+
+        function DataPrint(){
+            drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 1);
+            drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 1);
+            var flag=false;
+            function Flag(){
+                myInterval = setInterval(()=>{
+                          DataPrint()
+                        }, time_period);
+                clearInterval(myDelay);
+            }
+            flag=false;
+            crc_state = crc_data[k];
+
+            drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, crc_state);
+            drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, crc_state);
+
+            for (var j=0; j<codes.length;j++){
+                state = codes[j][k];
+//                    console.log('state: '+state);
+//                    console.log('codes: '+codes);
+
+                row = data_leds[j][1] * result_step + result_border_x;
+                col = data_leds[j][0] * result_step + result_border_y;
+                drawCircle(ctx, row, col, pointsize, state); //возможно надо рисовать в конце единовременно
+
+            }
+            drawCircle(ctx, service_leds[0][0], service_leds[0][1], pointsize, d2_count); //возможно надо рисовать в конце единовременно
+            d2_count += 1;
+            if (d2_count == 2){d2_count = 0;}
+
+            console.log('k: '+k+'  i: '+i);
+            if (k==7){
+                k=0;
+                drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 0);
+                drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 0);
+
+
+                clearInterval(myInterval);
+                text = document.getElementById("text").value;
+                if (text==previous_text){
+                    var myDelay = setInterval(()=>{
+                              Flag()
+                            }, time_period*5);
+                }
+
+//                if (i==codes[0].length-1){
+//                    clearInterval(myInterval);
+//                }
+
+            }
+            k+=1;
+        }
+
+        var myInterval = setInterval(()=>{
+                          DataPrint()
+                        }, time_period);
+
+            //ждем time_period
+//            sleep(time_period);
+
+        //ждем time_period * 5
+//        sleep(time_period*5);
+
+    }
+//
+//
+//
 }
 
 function SumDigits(number){
