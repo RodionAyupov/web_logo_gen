@@ -12,7 +12,7 @@ function LogoGenerator(){
 //    alert(document.getElementById("text").value);
     var canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth; //document.width is obsolete
-    canvas.height = window.innerHeight*0.9; //document.height is obsolete
+    canvas.height = window.innerHeight*1; //document.height is obsolete
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
     var ctx = canvas.getContext("2d");

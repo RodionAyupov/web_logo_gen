@@ -1,5 +1,5 @@
+<!--{% load static %}-->
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,9 +33,20 @@
 <!--      <button onclick="LogoGenerator()">SET</button>-->
 
 
-    <div id="header">
-        <input name="input_text" type="text" id="text"  maxlength = "10">
-        <button name="buttonExecute" onclick="LogoGenerator()">ENTER</button>
+    <div id="header" class="input-group mb-3">
+        <div id="left-group">
+            <img id='logo' src="static/img/logo.png" alt="">
+            <button class="btn btn-outline-secondary" name="info" onclick="">INFO</button>
+            <button class="btn btn-outline-secondary" name="tools" onclick="">TOOLS</button>
+        </div>
+
+        <div id="right-group">
+            <input name="input_text" class="form-control" placeholder="Enter text (10 symbols max)" type="text" id="text"  maxlength = "10">
+            <div class="input-group-append">
+                <button id="test1" class="btn btn-outline-secondary" name="buttonExecute" onclick="LogoGenerator()">ENTER</button>
+            </div>
+        </div>
+
     </div>
 
 
@@ -64,6 +75,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="/static/js/logo_gen.js"></script>
+<script type="text/javascript" src="/static/js/css_assist.js"></script>
 
 </body>
 
