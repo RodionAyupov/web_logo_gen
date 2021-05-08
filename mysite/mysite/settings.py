@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -124,6 +125,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'home/rodionayupov/web_logo_gen/mysite/static'
+# STATIC_ROOT = 'static/'
+
 
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, "static",),

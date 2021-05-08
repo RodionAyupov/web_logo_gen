@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="static/images/icon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="static/img/icon.ico" type="image/x-icon">
 
-    <title>Laser signal decoding</title>
+    <title>Avant Space Demo Toolkit</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Bootstrap-->
@@ -23,17 +23,33 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js"></script>
     <!-- Custom styles -->
-<!--    <link rel="stylesheet" href="{% static 'css/landing_styles.css' %}">-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_page.css' %}">
 
 </head>
 <body>
-    <canvas id="myCanvas" style="border:1px solid #000000;">
 
+
+<!--      <input name="input_text" type="text" maxlength = "10" placeholder="Enter text">-->
+<!--      <button onclick="LogoGenerator()">SET</button>-->
+
+
+    <div id="header">
+        <input name="input_text" type="text" id="text"  maxlength = "10">
+        <button name="buttonExecute" onclick="LogoGenerator()">ENTER</button>
+    </div>
+
+
+    <canvas id="myCanvas" style="border:1px solid #000000;">
     </canvas>
-    <br>
-    <input name="input_text" type="text" id="text" maxlength = "10"><br>
-    <button name="buttonExecute" onclick="LogoGenerator()">Press Here !!!!</button>
-    <br>
+
+<!--    <div class="form-group">-->
+<!--    <label for="exampleInputEmail1">Email address</label>-->
+<!--    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
+<!--    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+<!--  </div>-->
+
+
+<!--    <br>-->
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>

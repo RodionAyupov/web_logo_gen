@@ -8,7 +8,7 @@ function drawCircle(ctx, x, y, star_size, color_state) {
 
 function LogoGenerator(){
 //    alert(text);
-//    var text = document.getElementsById("text").value;
+    var text = document.getElementById("text").value;
 //    alert(document.getElementById("text").value);
     var canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth; //document.width is obsolete
