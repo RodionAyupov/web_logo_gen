@@ -1,3 +1,10 @@
+function hide (elements) {
+  elements = elements.length ? elements : [elements];
+  for (var index = 0; index < elements.length; index++) {
+    elements[index].style.display = 'none';
+  }
+}
+
 function drawCircle(ctx, x, y, star_size, color_state) {
         if(color_state==1){ctx.fillStyle = "blue";}
         else {ctx.fillStyle = "black"; star_size+=1;}
@@ -8,6 +15,7 @@ function drawCircle(ctx, x, y, star_size, color_state) {
 
 function LogoGenerator(){
 //    alert(text);
+    hide(document.getElementById('welcome-text'));
     var text = document.getElementById("text").value;
 //    alert(document.getElementById("text").value);
     var canvas = document.getElementById("myCanvas");
