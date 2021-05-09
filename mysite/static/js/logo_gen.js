@@ -25,11 +25,26 @@ function show (elements) {
   }
 }
 
+function print_airplane(ctx, speed, size, current_x, current_y, start_x, start_y, finish_x, finish_y, screen_width, screen_height, color){
+    drawCircle(ctx, current_x, current_y, size*2, 0);
+    var delta_x = (finish_x - start_x)/speed;
+    var delta_y = (finish_y - start_y) / speed;
+    var current_x = current_x+delta_x;
+    var current_y = current_y+delta_y;
+
+    if (current_x < 100 || Math.abs(current_x-finish_x)<100){current_x = start_x;}
+    if (current_y < 100 || Math.abs(current_y-finish_y)<100){current_y = start_y;}
+
+    drawCircle(ctx, current_x, current_y, size, color);
+    return [0, current_x, current_y];
+}
+
 
 function drawCircle(ctx, x, y, star_size, color_state) {
         if(color_state==1){ctx.fillStyle = "blue";}
         else if (color_state==0 ){ctx.fillStyle = "black"; star_size+=1;}
-        else if (color_state==3 ){ctx.fillStyle = "white"; star_size+=1;}
+        else if (color_state==3 ){ctx.fillStyle = "white"; }
+        else if (color_state==4 ){ctx.fillStyle = "red";}
         ctx.beginPath();
         ctx.arc(x, y, star_size, 0, 2 * Math.PI);
         ctx.fill();
@@ -37,6 +52,8 @@ function drawCircle(ctx, x, y, star_size, color_state) {
 
 function LogoGenerator(){
 //    alert(text);
+
+
     hide(document.getElementById('welcome-text'));
     var text = document.getElementById("text").value;
 //    alert(document.getElementById("text").value);
@@ -46,11 +63,14 @@ function LogoGenerator(){
 //    console.log(document.getElementById("tools").clientHeight);
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
+    var screen_width = canvas.width;
+    var screen_height = canvas.height;
     var ctx = canvas.getContext("2d");
     var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 
 
     for (var i = 1; i < 99999; i++)
@@ -63,7 +83,29 @@ function LogoGenerator(){
     var logosize = parseInt(document.getElementById("logo-size").value);
     var environment = parseInt(document.getElementById("environment-level").value);
 
-    PrintLogo(ctx, 10, new_fig, 40, 0.015*logosize/50, canvasWidth, canvasHeight, pointsize, prepared_text, environment);
+    var airplanes_number = 0;
+    var airplane_size = 3;
+    if (environment>3){airplanes_number=3;}
+    var speed_airplane = [];
+    for (var f=0; f<airplanes_number; f++){speed_airplane.push(Math.random()*500+300);}
+    var airplane_x = [];
+    for (var f=0; f<airplanes_number; f++){airplane_x.push(Math.random()*screen_width*1/5+screen_width*2/5);}
+    var airplane_y = [];
+    for (var f=0; f<airplanes_number; f++){airplane_y.push(Math.random()*screen_height*1/5+screen_height*2/5);}
+    var airplane_finish_x = [];
+    for (var f=0; f<airplanes_number; f++){airplane_finish_x.push(Math.random()*screen_width);}
+    var airplane_finish_y = [];
+    for (var f=0; f<airplanes_number; f++){airplane_finish_y.push(Math.random()*screen_height);}
+    var airplane_start_x = [];
+    for (var f=0; f<airplanes_number; f++){airplane_start_x.push(Math.random()*screen_width);}
+    var airplane_start_y = [];
+    for (var f=0; f<airplanes_number; f++){airplane_start_y.push(Math.random()*screen_height);}
+
+    var airplane_data=[airplane_size, airplanes_number, speed_airplane, airplane_x, airplane_y, airplane_finish_x, airplane_finish_y, airplane_start_x, airplane_start_y];
+
+
+
+    PrintLogo(ctx, 10, new_fig, 40, 0.015*logosize/50, canvasWidth, canvasHeight, pointsize, prepared_text, environment, airplane_data);
 //    window.setInterval(function(){
 //      drawCircle(ctx, Math.random()*344, Math.random()*344, 4, 1);
 //    }, 500 / 1); // 25 times per second
@@ -222,11 +264,21 @@ function CreateBankFigure(){
     return bank_figure;
 }
 
-function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_height, pointsize, prepared_text, environment){
+function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_height, pointsize, prepared_text, environment, airplane_data){
 // PrintLogo(ctx, 10, CreateBankFigure(), 40, 0.02, canvasWidth, canvasHeight, 5, codes, crc_data)
     for (var num=0; num<environment*200;num++){
-        drawCircle(ctx, Math.random()*screen_width, Math.random()*screen_height, 0.1, 3);
+        drawCircle(ctx, Math.random()*screen_width, Math.random()*screen_height, 0.9, 3);
     }
+    var airplane_size = airplane_data[0];
+    var airplanes_number = airplane_data[1];
+    var speed_airplane = airplane_data[2];
+    var airplane_x = airplane_data[3];
+    var airplane_y = airplane_data[4];
+    var airplane_finish_x = airplane_data[5];
+    var airplane_finish_y = airplane_data[6];
+    var airplane_start_x = airplane_data[7];
+    var airplane_start_y = airplane_data[8];
+
 
     var codes = prepared_text[0];
     var crc_data = prepared_text[1];
@@ -288,12 +340,14 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
         var d = new Date();
         var crc_data_counter = -1;
         var i=0;
+        var tmp=[];
         crc_data_counter+=1;
         var k=0;
 //        console.log(k);
         var status = false;
 
         function DataPrint(){
+//            for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize, 1)}
             drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 1);
             drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 1);
             var flag=false;
@@ -323,6 +377,15 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
             d2_count += 1;
             if (d2_count == 2){d2_count = 0;}
 
+            //airplanes
+            for (var ap=0; ap<airplanes_number; ap++){
+                tmp = print_airplane(ctx, speed_airplane[ap], airplane_size, airplane_x[ap], airplane_y[ap], airplane_start_x[ap], airplane_start_y[ap], airplane_finish_x[ap], airplane_finish_y[ap], screen_width, screen_height, 4)
+                airplane_x[ap] = tmp[1]
+                airplane_start_y[ap] = tmp[2]
+            }
+
+
+
             var pointsize_new=parseInt(document.getElementById("star-size").value);
             var logosize_new = 0.015*parseInt(document.getElementById("logo-size").value)/50;
             var environment_new = parseInt(document.getElementById("environment-level").value);
@@ -347,6 +410,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
 
 //            console.log('k: '+k+'  i: '+i);
             if (k==7){
+
                 k=0;
                 drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 0);
                 drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 0);
