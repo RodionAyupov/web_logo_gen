@@ -24,6 +24,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js"></script>
     <!-- Custom styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_page.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tools.css' %}">
 
 </head>
 <body>
@@ -37,8 +38,8 @@
         <div id="left-group">
             <a href="https://www.avantspace.com/">
                 <img id='logo' src="static/img/logo.svg" alt=""></a>
-            <button class="btn btn-outline-secondary" name="info" onclick=" ">ABOUT</button>
-            <button class="btn btn-outline-secondary" name="tools" onclick="">TOOLS</button>
+            <button class="btn btn-outline-secondary" name="info" onclick="location.href='https://ru.wikipedia.org'">ABOUT</button>
+            <button class="btn btn-outline-secondary" name="tools" onclick="ToggleButton()">TOOLS</button>
         </div>
 
         <div id="right-group">
@@ -49,6 +50,29 @@
         </div>
 
     </div>
+
+    <div id='tools' style="display:none">
+        <h1>CONSTELLATION CONFIGURATION</h1>
+        <div id='tools-blocks'>
+            <div id="size-block">
+                <h2>CONSTELLATION SIZE <output id="out-logo-size"></output></h2>
+                <input id="logo-size" type="range" value="50" min="20" max="100" data-rangeslider>
+            </div>
+
+            <div id="star-block">
+                <h2>STAR SIZE <output id="out-star-size"></output></h2>
+                <input id="star-size" type="range" value="3" min="1" max="8" data-rangeslider>
+
+            </div>
+
+            <div id="environment-block">
+                <h2>ENVIRONMENT <output id="out-environment-level"></output></h2>
+                <input id="environment-level" value="0" type="range" min="0" max="5" data-rangeslider>
+            </div>
+        </div>
+
+    </div>
+
 
     <div id='welcome-text'>
         <h1>WELCOME!</h1>
@@ -84,7 +108,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="/static/js/logo_gen.js"></script>
-<script type="text/javascript" src="/static/js/css_assist.js"></script>
+    <script type="text/javascript" src="/static/js/css_assist.js"></script>
 
 </body>
 

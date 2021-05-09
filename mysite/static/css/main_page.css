@@ -92,6 +92,71 @@ box-sizing: border-box;
     font-size: 20px !important;
 }
 
+#tools{
+    text-align:center;
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 50px !important;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#tools h1{
+    font-size: 25px !important;
+}
+#tools h2{
+    font-size: 15px !important;
+}
+
+#size-block{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+#star-block{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+#environment-block{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+#tools-blocks{
+    flex-direction: row;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    color: white;
+}
+
+#out-logo-size{
+    color: white !important;
+    width: 25px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+#out-star-size{
+    color: white !important;
+    width: 25px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+#out-environment-level{
+    color: white !important;
+    width: 25px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+#tools h1{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: white;
+    font-size: 20px !important;
+}
+
 #welcome-text h1{
     font-size: 40px !important;
 }

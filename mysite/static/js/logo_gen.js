@@ -1,3 +1,16 @@
+$(document).ready ( function(){
+   hide(document.getElementById('tools'));
+});
+
+function ToggleButton() {
+  var x = document.getElementById("tools");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
 function hide (elements) {
   elements = elements.length ? elements : [elements];
   for (var index = 0; index < elements.length; index++) {
@@ -5,9 +18,18 @@ function hide (elements) {
   }
 }
 
+function show (elements) {
+  elements = elements.length ? elements : [elements];
+  for (var index = 0; index < elements.length; index++) {
+    elements[index].style.display = 'block';
+  }
+}
+
+
 function drawCircle(ctx, x, y, star_size, color_state) {
         if(color_state==1){ctx.fillStyle = "blue";}
-        else {ctx.fillStyle = "black"; star_size+=1;}
+        else if (color_state==0 ){ctx.fillStyle = "black"; star_size+=1;}
+        else if (color_state==3 ){ctx.fillStyle = "white"; star_size+=1;}
         ctx.beginPath();
         ctx.arc(x, y, star_size, 0, 2 * Math.PI);
         ctx.fill();
@@ -21,6 +43,7 @@ function LogoGenerator(){
     var canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth; //document.width is obsolete
     canvas.height = window.innerHeight*1; //document.height is obsolete
+//    console.log(document.getElementById("tools").clientHeight);
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
     var ctx = canvas.getContext("2d");
@@ -35,8 +58,12 @@ function LogoGenerator(){
 
 //    alert(PrepareText('tinkoff.ru'));
     var new_fig = CreateBankFigure();
-    var prepared_text = PrepareText('tinkoff.ru');
-    PrintLogo(ctx, 10, new_fig, 40, 0.03, canvasWidth, canvasHeight, 5, prepared_text);
+    var prepared_text = PrepareText(text);
+    var pointsize = parseInt(document.getElementById("star-size").value);
+    var logosize = parseInt(document.getElementById("logo-size").value);
+    var environment = parseInt(document.getElementById("environment-level").value);
+
+    PrintLogo(ctx, 10, new_fig, 40, 0.015*logosize/50, canvasWidth, canvasHeight, pointsize, prepared_text, environment);
 //    window.setInterval(function(){
 //      drawCircle(ctx, Math.random()*344, Math.random()*344, 4, 1);
 //    }, 500 / 1); // 25 times per second
@@ -195,8 +222,12 @@ function CreateBankFigure(){
     return bank_figure;
 }
 
-function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_height, pointsize, prepared_text){
+function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_height, pointsize, prepared_text, environment){
 // PrintLogo(ctx, 10, CreateBankFigure(), 40, 0.02, canvasWidth, canvasHeight, 5, codes, crc_data)
+    for (var num=0; num<environment*200;num++){
+        drawCircle(ctx, Math.random()*screen_width, Math.random()*screen_height, 0.1, 3);
+    }
+
     var codes = prepared_text[0];
     var crc_data = prepared_text[1];
     var time_period = 1000 / frequency;
@@ -206,7 +237,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
     var result_step = (height * scale / size);
     var result_border = Math.ceil((width - height) / 2) + Math.ceil((height - result_step * size) / 2);
     var result_border_x = Math.ceil((width - height) / 2) + Math.ceil((height - result_step * size) / 2);
-    var result_border_y = Math.ceil((height - result_step * size) / 2);
+    var result_border_y = Math.ceil((height - result_step * size) / 2)-150;
 
     //extracting leds data from figure
     var data_leds = figure.data_leds.positions;
@@ -238,12 +269,14 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
     crc_leds = crc_leds_transformed;
 
     for(var i=0;i<crc_leds.length;i++){drawCircle(ctx, crc_leds[i][0], crc_leds[i][1], pointsize, 1)}
-    console.log('qwdwd');
+//    console.log('qwdwd');
     //далее цикл пока не будет нажата кнопка еще раз
     var previous_text = document.getElementById("text").value;
 //    alert('previous_text: '+previous_text);
     var text = previous_text;
-    console.log(text);
+//    console.log(text);
+
+//    pointsize = document.getElementById("star-size").value;
     if (text==previous_text){
         var d2_count=0;
         var crc_state=0;
@@ -290,12 +323,33 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
             d2_count += 1;
             if (d2_count == 2){d2_count = 0;}
 
-            console.log('k: '+k+'  i: '+i);
+            var pointsize_new=parseInt(document.getElementById("star-size").value);
+            var logosize_new = 0.015*parseInt(document.getElementById("logo-size").value)/50;
+            var environment_new = parseInt(document.getElementById("environment-level").value);
+
+            if (pointsize_new!=pointsize){
+                drawCircle(ctx, result_border_x, result_border_y, 20000, 1);
+                pointsize=pointsize_new;
+                LogoGenerator();
+            }
+
+            if (logosize_new!=scale){
+                drawCircle(ctx, result_border_x, result_border_y, 20000, 1);
+                scale=logosize_new;
+                LogoGenerator();
+            }
+
+            if (environment_new!=environment){
+                drawCircle(ctx, result_border_x, result_border_y, 20000, 1);
+                environment=environment_new;
+                LogoGenerator();
+            }
+
+//            console.log('k: '+k+'  i: '+i);
             if (k==7){
                 k=0;
                 drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 0);
                 drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 0);
-
 
                 clearInterval(myInterval);
                 text = document.getElementById("text").value;
