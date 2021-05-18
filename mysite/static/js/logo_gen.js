@@ -269,6 +269,9 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
     for (var num=0; num<environment*200;num++){
         drawCircle(ctx, Math.random()*screen_width, Math.random()*screen_height, 0.9, 3);
     }
+
+    var all_state=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     var airplane_size = airplane_data[0];
     var airplanes_number = airplane_data[1];
     var speed_airplane = airplane_data[2];
@@ -331,6 +334,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
 //    pointsize = document.getElementById("star-size").value;
     if (text==previous_text){
         var d2_count=0;
+
         var crc_state=0;
         var state=0;
         var row=0;
@@ -343,25 +347,53 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
         var tmp=[];
         crc_data_counter+=1;
         var k=0;
+        var d3_count=0;
 //        console.log(k);
         var status = false;
 
         function DataPrint(){
-//            for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize, 1)}
+            for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize, 1)}
             drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 1);
             drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 1);
+            all_state[12] = 1;
+            all_state[10] = 1;
             var flag=false;
-            function Flag(){
-                myInterval = setInterval(()=>{
-                          DataPrint()
-                        }, time_period);
-                clearInterval(myDelay);
+
+            function packetDelay(){
+                clearInterval(crcInterval);
+                myDelay = setInterval(()=>{
+                          Flag()
+                        }, time_period*5);
             }
+
+            function Flag(){
+                d3_count+=1;
+                if (d3_count>0){drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 0);}
+
+                if (d3_count>4){
+                    d3_count=0;
+                    myInterval = setInterval(()=>{
+                              DataPrint()
+                            }, time_period);
+                    clearInterval(myDelay);
+                    console.log('start new cycle');
+                }
+            }
+            console.log('k: '+k);
             flag=false;
             crc_state = crc_data[k];
 
+
+            all_state[13] = crc_state;
+            all_state[14] = crc_state;
             drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, crc_state);
             drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, crc_state);
+
+
+            drawCircle(ctx, service_leds[0][0], service_leds[0][1], pointsize, d2_count); //возможно надо рисовать в конце единовременно
+            all_state[11] = d2_count;
+            d2_count += 1;
+            if (d2_count == 2){d2_count = 0;}
 
             for (var j=0; j<codes.length;j++){
                 state = codes[j][k];
@@ -371,11 +403,10 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 row = data_leds[j][1] * result_step + result_border_x;
                 col = data_leds[j][0] * result_step + result_border_y;
                 drawCircle(ctx, row, col, pointsize, state); //возможно надо рисовать в конце единовременно
+                all_state[j] = state;
 
             }
-            drawCircle(ctx, service_leds[0][0], service_leds[0][1], pointsize, d2_count); //возможно надо рисовать в конце единовременно
-            d2_count += 1;
-            if (d2_count == 2){d2_count = 0;}
+
 
             //airplanes
             for (var ap=0; ap<airplanes_number; ap++){
@@ -383,8 +414,6 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 airplane_x[ap] = tmp[1]
                 airplane_start_y[ap] = tmp[2]
             }
-
-
 
             var pointsize_new=parseInt(document.getElementById("star-size").value);
             var logosize_new = 0.015*parseInt(document.getElementById("logo-size").value)/50;
@@ -408,25 +437,31 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 LogoGenerator();
             }
 
-//            console.log('k: '+k+'  i: '+i);
+            console.log('all_state: '+all_state);
             if (k==7){
 
-                k=0;
+                k=-1;
+                all_state[10] = 0;
+                all_state[12] = 0
+                drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, 0);
+                drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, 0);
                 drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 0);
-                drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 0);
+
+
 
                 clearInterval(myInterval);
                 text = document.getElementById("text").value;
-                if (text==previous_text){
-                    var myDelay = setInterval(()=>{
+
+                console.log('myDelay time_period*5 started');
+
+                var myDelay = setInterval(()=>{
                               Flag()
-                            }, time_period*5);
-                }
+                            }, time_period*1);
+
 
 //                if (i==codes[0].length-1){
 //                    clearInterval(myInterval);
 //                }
-
             }
             k+=1;
         }
@@ -434,6 +469,14 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
         var myInterval = setInterval(()=>{
                           DataPrint()
                         }, time_period);
+//
+//
+//
+
+//
+//        var myDelay = setInterval(()=>{
+//                          Flag()
+//                        }, time_period*5);
 
             //ждем time_period
 //            sleep(time_period);
