@@ -376,10 +376,10 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                               DataPrint()
                             }, time_period);
                     clearInterval(myDelay);
-                    console.log('start new cycle');
+//                    console.log('start new cycle');
                 }
             }
-            console.log('k: '+k);
+//            console.log('k: '+k);
             flag=false;
             crc_state = crc_data[k];
 
@@ -437,7 +437,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 LogoGenerator();
             }
 
-            console.log('all_state: '+all_state);
+//            console.log('all_state: '+all_state);
             if (k==7){
 
                 k=-1;
@@ -452,7 +452,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 clearInterval(myInterval);
                 text = document.getElementById("text").value;
 
-                console.log('myDelay time_period*5 started');
+//                console.log('myDelay time_period*5 started');
 
                 var myDelay = setInterval(()=>{
                               Flag()
