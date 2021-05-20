@@ -323,7 +323,7 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
     }
     crc_leds = crc_leds_transformed;
 
-    for(var i=0;i<crc_leds.length;i++){drawCircle(ctx, crc_leds[i][0], crc_leds[i][1], pointsize, 1)}
+    for(var i=0;i<crc_leds.length;i++){drawCircle(ctx, crc_leds[i][0], crc_leds[i][1], pointsize, 0)}
 //    console.log('qwdwd');
     //далее цикл пока не будет нажата кнопка еще раз
     var previous_text = document.getElementById("text").value;
@@ -353,11 +353,17 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
 
         function DataPrint(){
             for(var i=0;i<contour_leds.length;i++){drawCircle(ctx, contour_leds[i][0], contour_leds[i][1], pointsize, 1)}
+
+
             drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 1);
             drawCircle(ctx, service_leds[2][0], service_leds[2][1], pointsize, 1);
+
             all_state[12] = 1;
             all_state[10] = 1;
             var flag=false;
+
+
+
 
             function packetDelay(){
                 clearInterval(crcInterval);
@@ -382,19 +388,20 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
 //            console.log('k: '+k);
             flag=false;
             crc_state = crc_data[k];
-
-
             all_state[13] = crc_state;
             all_state[14] = crc_state;
-            drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, crc_state);
-            drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, crc_state);
 
 
             drawCircle(ctx, service_leds[0][0], service_leds[0][1], pointsize, d2_count); //возможно надо рисовать в конце единовременно
+
+
+
+
             all_state[11] = d2_count;
             d2_count += 1;
             if (d2_count == 2){d2_count = 0;}
-
+            drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, crc_state);
+            drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, crc_state);
             for (var j=0; j<codes.length;j++){
                 state = codes[j][k];
 //                    console.log('state: '+state);
@@ -406,6 +413,8 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 all_state[j] = state;
 
             }
+
+
 
 
             //airplanes
@@ -443,9 +452,11 @@ function PrintLogo(ctx, frequency, figure, size, scale, screen_width, screen_hei
                 k=-1;
                 all_state[10] = 0;
                 all_state[12] = 0
-                drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, 0);
-                drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, 0);
+
+//                drawCircle(ctx, crc_leds[1][0], crc_leds[1][1], pointsize, 0);
+//                drawCircle(ctx, crc_leds[0][0], crc_leds[0][1], pointsize, 0);
                 drawCircle(ctx, service_leds[1][0], service_leds[1][1], pointsize, 0);
+
 
 
 
